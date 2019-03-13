@@ -38,13 +38,13 @@ class Connector
 		@enable = true
 
 		@connections = {"input" => [], output => []}
-		set_logic(state)
+		self.set_logic(state)
 		
 		@old_state = nil
 		
-		@name = name
-		@name_set = (name != nil)
-		@index = CircuitIndexer.index()
+		@index = CircuitIndexer.index(self)
+
+		@name = if name.nil? then "connector#{@index}" else name end
 	end
 
 	def tap(element, mode)
@@ -89,14 +89,14 @@ class Connector
 		end
 
 		if [Fixnum, TrueClass, FalseClass, NilClass].include?(value.class)
-			@state = if value != nil then value else nil end
-			trigger()
+			@state = if value.nil? then nil else value end
+			self.trigger()
 		elsif value.is_a?(Connector) 
 			@state = value.get_logic()
 		else
 			raise ArgumentError, "Invalid Argument: Invalid input type. Only integer, boolean and nil accepted."			
 		end
-		trigger()
+		self.trigger()
 	end	
 
 	def get_logic()
@@ -104,10 +104,10 @@ class Connector
 	end
 
 	def set_name(name)
-		if (@name == nil) and @name_set == false
-			#for
-		elsif @name != nil
+		if name.present?
 			@name = name
+		else
+			raise "connector name cannot be nil"
 		end
 	end
 

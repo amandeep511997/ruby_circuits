@@ -38,13 +38,13 @@ module FlipFlop
 	class SRLatch
 		include FlipFlopBase
 		def initialize(	s, 
-						r, 
-						enable, 
-						clk, 
-						preset=Connector.new(1), 
-						clear=Connector.new(1), 
-						a=Connector.new(0), 
-						b=Connector.new(1))
+					r, 
+					enable, 
+					clk, 
+					preset=Connector.new(1), 
+					clear=Connector.new(1), 
+					a=Connector.new(0), 
+					b=Connector.new(1))
 
 			self.set_properties(a, b, clk, enable)
 
@@ -199,13 +199,13 @@ module FlipFlop
 	class JK
 		include FlipFlopBase
 		def initialize(	j, 
-						k, 
-						enable, 
-						clk, 
-						preset=Connector.new(1), 
-						clear=Connector.new(1), 
-						a=Connector.new(0), 
-						b=Connector.new(1))
+					k, 
+					enable, 
+					clk, 
+					preset=Connector.new(1), 
+					clear=Connector.new(1), 
+					a=Connector.new(0), 
+					b=Connector.new(1))
 
 			self.set_properties(a, b, clk, enable)
 
@@ -344,12 +344,12 @@ module FlipFlop
 	class D
 		include FlipFlopBase
 		def initialize(	d,
-						enable, 
-						clk, 
-						preset=Connector.new(1), 
-						clear=Connector.new(1), 
-						a=Connector.new(0), 
-						b=Connector.new(0))
+					enable, 
+					clk, 
+					preset=Connector.new(1), 
+					clear=Connector.new(1), 
+					a=Connector.new(0), 
+					b=Connector.new(0))
 
 			self.set_properties(a, b, clk, enable)
 
@@ -467,12 +467,12 @@ module FlipFlop
 
 	class T < JK
 		def initialize(	t,
-						enable, 
-						clk, 
-						preset=Connector.new(1), 
-						clear=Connector.new(1), 
-						a=Connector.new, 
-						b=Connector.new)
+					enable, 
+					clk, 
+					preset=Connector.new(1), 
+					clear=Connector.new(1), 
+					a=Connector.new, 
+					b=Connector.new)
 
 			super(t, t, enable, clk, preset, clear, a, b)
 		end

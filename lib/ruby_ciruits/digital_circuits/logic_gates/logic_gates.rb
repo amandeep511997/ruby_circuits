@@ -15,7 +15,6 @@ require_relative 'gates'
 =end 
 
 module LogicGates
-
 	class AND
 		include Gates
 
@@ -27,14 +26,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(true)
+				self.update_result(1)
 				# update the input after a computation
 				self.update_history() 
-				value = true
+				value = 1
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value & inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value & inp.output()
 					else
 						value = value & inp
@@ -64,14 +63,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(false)
+				self.update_result(0)
 				# update the input after a computation
 				self.update_history() 
-				value = false
+				value = 0
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value | inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value | inp.output()
 					else
 						value = value | inp
@@ -128,7 +127,7 @@ module LogicGates
 				inp = @inputs[0]
 				if inp.is_a?(Connector)
 					value = inp.state
-				elsif inp.is_a?(AND)
+				elsif LogicGates.belongs?(inp)
 					value = inp.output()
 				else
 					value = inp
@@ -158,14 +157,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(false)
+				self.update_result(0)
 				# update the input after a computation
 				self.update_history() 
-				value = false
+				value = 0
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value ^ inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value ^ inp.output()
 					else
 						value = value ^ inp
@@ -195,14 +194,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(false)
+				self.update_result(0)
 				# update the input after a computation
 				self.update_history() 
-				value = true
+				value = 1
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value & inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value & inp.output()
 					else
 						value = value & inp
@@ -217,7 +216,7 @@ module LogicGates
 		end
 
 		def to_s
-			'XOR'
+			'NAND'
 		end
 
 	end
@@ -233,14 +232,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(true)
+				self.update_result(1)
 				# update the input after a computation
 				self.update_history() 
-				value = false
+				value = 0
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value | inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value | inp.output()
 					else
 						value = value | inp
@@ -255,7 +254,7 @@ module LogicGates
 		end
 
 		def to_s
-			'XOR'
+			'NOR'
 		end
 
 	end
@@ -271,14 +270,14 @@ module LogicGates
 		def trigger()
 			if self.compare_history()
 				@history_active = 1
-				self.update_result(true)
+				self.update_result(1)
 				# update the input after a computation
 				self.update_history() 
-				value = true
+				value = 1
 				@inputs.each do |inp|
 					if inp.is_a?(Connector)
 						value = value ^ inp.state
-					elsif inp.is_a?(AND)
+					elsif LogicGates.belongs?(inp)
 						value = value ^ inp.output()
 					else
 						value = value ^ inp
@@ -293,9 +292,16 @@ module LogicGates
 		end
 
 		def to_s
-			'XOR'
+			'XNOR'
 		end
 
+	end
+
+	def self.belongs?(element)
+		type = element.is_a?(AND) | element.is_a?(OR) | element.is_a?(NOT)
+		type = element.is_a?(NAND) | element.is_a?(NOR)
+		type = element.is_a?(XOR) | element.is_a?(XNOR)
+		return type
 	end
 
 end

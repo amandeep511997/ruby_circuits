@@ -31,7 +31,7 @@
 
 class Connector
 
-	attr_reader :index, :state, :name
+	attr_reader :index, :state, :name, :connections
 
 	def initialize(state=nil, name=nil)
 		# to store all the taps onto this connection

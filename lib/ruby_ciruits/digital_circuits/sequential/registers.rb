@@ -1,3 +1,7 @@
+require_relative "../circuit_helpers/connectors/connector"
+require_relative "flip_flops"
+
+
 =begin 
 	contains all registers for digital circuits
 =end

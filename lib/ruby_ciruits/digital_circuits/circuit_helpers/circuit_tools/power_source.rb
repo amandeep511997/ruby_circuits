@@ -1,3 +1,5 @@
+require_relative "../connectors/connector"
+
 =begin 
 	Power Source from which various connectors can tap by connecting to it
 	taps = The list of all connectors connected to this power source

@@ -1,3 +1,6 @@
+require_relative "../circuit_helpers/connectors/connector"
+require_relative "../logic_gates/logic_gates"
+
 =begin 
 	Module contains All flip flops
 =end

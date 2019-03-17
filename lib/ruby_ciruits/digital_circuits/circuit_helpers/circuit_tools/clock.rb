@@ -1,4 +1,6 @@
 require 'celluloid'
+require_relative "../connectors/connector"
+
 =begin 
 	This class uses Threading technique to create a clock with a ceratin time period
 
@@ -42,7 +44,7 @@ class Clock
 	def start
 		if not @started
 			every @time_period do 
-				self.toogle_state()
+				toogle_state()
 			end	
 		end
 	end

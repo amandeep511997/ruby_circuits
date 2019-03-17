@@ -1,3 +1,9 @@
+require_relative "../circuit_helpers/connectors/connector"
+require_relative "../logic_gates/logic_gates"
+require_relative "flip_flops"
+require_relative "registers"
+
+
 =begin 
 	contains all counters for digital circuits
 =end

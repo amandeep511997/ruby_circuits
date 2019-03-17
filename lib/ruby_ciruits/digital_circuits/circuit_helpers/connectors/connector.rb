@@ -1,3 +1,5 @@
+require_relative "../utility/circuit_indexer"
+
 =begin
 	This class provides a medium for data transfer, a digital connection which can be connected betweeen any 
 	digital component to connect them together.
@@ -31,7 +33,8 @@
 
 class Connector
 
-	attr_reader :index, :state, :name, :connections
+	attr_accessor :state
+	attr_reader :index, :name, :connections
 
 	def initialize(state=nil, name=nil)
 		# to store all the taps onto this connection

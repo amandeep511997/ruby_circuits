@@ -1,3 +1,5 @@
+require_relative "../connectors/connector"
+
 =begin 
 	Ground from which various connectors ccan tap by connecting to it.
 	taps = list of all connectors connected to this ground

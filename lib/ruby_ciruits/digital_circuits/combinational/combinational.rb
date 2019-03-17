@@ -276,7 +276,9 @@ module Combinational
 			if inputs.length < 2 or (inputs.length & (inputs.length - 1)) != 0
 				raise "number of inputs must be a power of 2"
 			end
-			@mux_select_lines = []
+			
+			@mux_select_lines = Array.new
+
 			self.set_properties(inputs)
 		end
 
@@ -298,7 +300,7 @@ module Combinational
 			end
 
 			if value.is_a?(Connector)
-				value.tap("input")
+				value.tap(self, "input")
 				self.trigger()
 			end
 		end
@@ -311,7 +313,7 @@ module Combinational
 			end
 
 			if value.is_a?(Connector)
-				value.tap("input")
+				value.tap(self, "input")
 				self.trigger()
 			end
 		end
@@ -352,7 +354,7 @@ module Combinational
 		def update_select_connections()
 			@mux_select_lines.each do |sel|
 				if sel.is_a?(Connector)
-					sel.tap("input")
+					sel.tap(self, "input")
 				end
 			end
 		end
@@ -369,13 +371,13 @@ module Combinational
 		attr_reader :demux_select_lines
 
 		def initialize(input)			
-			@demux_select_lines = []
-
-			self.set_properties(input)
+			@demux_select_lines = Array.new
 
 			@inputs = [input]
-			@output_type = []
-			@output_connector = []
+			@output_type = Array.new
+			@output_connector = Array.new
+
+			self.set_properties(input)
 		end
 
 		def select_lines(*args)
@@ -401,7 +403,7 @@ module Combinational
 			end
 
 			if value.is_a?(Connector)
-				value.tap("input")
+				value.tap(self, "input")
 				self.trigger()
 			end
 		end
@@ -414,7 +416,7 @@ module Combinational
 			@inputs[index] = value
 
 			if value.is_a?(Connector)
-				value.tap("input")
+				value.tap(self, "input")
 				self.trigger()
 			end
 		end
@@ -465,7 +467,7 @@ module Combinational
 				raise "expecting a Connector class object"
 			end
 
-			value.tap("output")
+			value.tap(self, "output")
 			@output_type[index] = 1
 			@output_connector[index] = value
 			self.trigger()
@@ -483,7 +485,7 @@ module Combinational
 		def update_select_connections
 			@demux_select_lines.each do |sel|
 				if sel.is_a?(Connector)
-					sel.tap("input")
+					sel.tap(self, "input")
 				end
 			end
 		end
@@ -503,14 +505,15 @@ module Combinational
 			end
 
 			connector_inputs = inputs.select { |inp| inp.is_a?(Connector) and inp.state == 1 }
-			if inputs.count(1) <= 1 and connector_inputs.length <= 1
+			if inputs.count(1) != 1 and connector_inputs.length != 1
 				raise "invald inputs"
 			end
-
-			self.set_properties(input)
+			
 			output_size = Math.log2(inputs.length).to_i
-			@output_type.concat([0] * output_size)
-			@output_connector.concat([nil] * output_size)				
+			@output_type = Array.new(output_size, 0)
+			@output_connector = Array.new(output_size, nil)
+
+			self.set_properties(inputs)
 		end
 
 		def trigger()
@@ -536,7 +539,7 @@ module Combinational
 				raise "number of inputs must be a power of 2"
 			end
 			connector_inputs = inputs.select { |inp| inp.is_a?(Connector) and inp.state == 1 }
-			if inputs.count(1) <= 1 and connector_inputs.length <= 1
+			if inputs.count(1) != 1 and connector_inputs.length != 1
 				raise "invald inputs"
 			end
 			@inputs = inputs
@@ -554,7 +557,7 @@ module Combinational
 			if index >= @inputs.length
 				temp << value
 				connector_inputs = inputs.select { |inp| inp.is_a?(Connector) and inp.state == 1 }
-				if inputs.count(1) <= 1 and connector_inputs.length <= 1
+				if inputs.count(1) != 1 and connector_inputs.length != 1
 					raise "invald inputs"
 				end
 				
@@ -566,14 +569,14 @@ module Combinational
 			else 
 				temp[index] = value
 				connector_inputs = inputs.select { |inp| inp.is_a?(Connector) and inp.state == 1 }
-				if inputs.count(1) <= 1 and connector_inputs.length <= 1
+				if inputs.count(1) != 1 and connector_inputs.length != 1
 					raise "invald inputs"
 				end
 				@inputs[index] = value
 			end
 
 			if value.is_a?(Connector)
-				value.tap('input')
+				value.tap(self, 'input')
 				self.trigger()
 			end
 		end
@@ -582,7 +585,7 @@ module Combinational
 			if not value.is_a?(Connector)
 				raise "expecting a Connector class object"
 			end
-			value.tap('output')
+			value.tap(self, 'output')
 			@output_type[index] = 1
 			@output_connector[index] = value
 			self.trigger()
@@ -610,16 +613,16 @@ module Combinational
 				raise "inputs cannot be 0"
 			end
 
-			self.set_properties(input)
+			output_size = (2**inputs.length).to_i
+			@output_type = Array.new(output_size, 0)
+			@output_connector = Array.new(output_size, 0)
 
-			@output_type = Array.new(2**inputs.length, 0)
-			@output_connector = Array.new(2**inputs.length, 0)
+			self.set_properties(inputs)
 		end
 
 		def trigger()
 			output = Array.new(2**@inputs.length, 0)
 			select_string = ""
-
 			@inputs.each do |inp|
 				if inp.is_a?(Connector)
 					select_string = select_string + inp.state.to_s
@@ -655,7 +658,7 @@ module Combinational
 			end
 
 			if value.is_a?(Connector)
-				value.tap("input")
+				value.tap(self, "input")
 				self.trigger()
 			end
 		end
@@ -664,7 +667,7 @@ module Combinational
 			if not is_a?(Connector)
 				raise "expecting a connector class object"
 			end
-			value.tap("output")
+			value.tap(self, "output")
 			@output_type[index] = 1
 			@output_connector[index] = value
 			self.trigger()

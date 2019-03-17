@@ -132,7 +132,7 @@ module LogicGates
 				else
 					value = inp
 				end
-				value = (not value)
+				value = 1 - value
 				self.update_result(value)
 				if @output_type == 1
 					@output_connector.trigger()
@@ -207,7 +207,7 @@ module LogicGates
 						value = value & inp
 					end
 				end
-				value = (not value)
+				value = 1 - value
 				self.update_result(value)
 				if @output_type == 1
 					@output_connector.trigger()
@@ -245,7 +245,7 @@ module LogicGates
 						value = value | inp
 					end
 				end
-				value = (not value)
+				value = 1 - value
 				self.update_result(value)
 				if @output_type == 1
 					@output_connector.trigger()
@@ -283,7 +283,7 @@ module LogicGates
 						value = value ^ inp
 					end
 				end
-				value = (not value)
+				value = 1 - value
 				self.update_result(value)
 				if @output_type == 1
 					@output_connector.trigger()

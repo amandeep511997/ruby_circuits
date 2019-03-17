@@ -17,11 +17,11 @@ module Gates
 	def set_properties(inputs)
 		# clean connections before updating new connections
 		@history_active = 0	# ignore history for the first computation
-		@output_type = 0 # if 1 then it goes to the connector class
+		@output_type ||= 0 # if 1 then it goes to the connector class
 		@result = nil # To store the result
-		@output_connector = nil # valid only if output_type is 1
+		@output_connector ||= nil # valid only if output_type is 1
 		## Make a check of input parameters raise exception if invalid
-		@inputs = inputs # set the inputs
+		@inputs = Array(inputs) # set the inputs
 		@history_inputs = [] # save a copy of inputs
 		# Any change in the input will trigger a change in the output
 		self.update_connections()
@@ -33,7 +33,7 @@ module Gates
 		@inputs.each do |inp|
 			# Connector as the class or one of the ancestral class
 			if inp.is_a?(Connector) 
-				inp.tap("input")
+				inp.tap(self, "input")
 			end
 		end
 	end
@@ -76,7 +76,7 @@ module Gates
 		end	
 
 		if value.is_a?(Connector)
-			value.tap("input")
+			value.tap(self, "input")
 		end
 
 		self.trigger()
@@ -130,7 +130,7 @@ module Gates
 		# Sets the output of the gate.
 		# It connects the passed connector to its output
 		if connector.is_a?(Connector)
-			connector.tap("output")
+			connector.tap(self, "output")
 			@output_type = 1
 			@output_connector = connector
 			@history_active = 0
@@ -143,7 +143,7 @@ module Gates
 	def reset_output
 		# This resets the output of the gate
 		# output of the gate is nott connected to any connector object
-		@output_connector.untap("output")
+		@output_connector.untap(self, "output")
 		@output_type = 0
 		@output_connector = nil
 	end

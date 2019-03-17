@@ -66,8 +66,10 @@ module FlipFlop
 			@nor_gate1 = LogicGates::NOR.new(@enabledS, a)
 			@nor_gate2 = LogicGates::NOR.new(@enabledR, b)
 
-			self.set_inputs(s, r, enable, preset, clear)
-			self.set_outputs(a, b)
+			to_inputs = {"S" => s, "R" => r, "enable" => enable, "preset" => preset, "clear" => clear}
+			self.set_inputs(to_inputs)
+			to_outputs = {"A" => a, "B" => b}
+			self.set_outputs(to_outputs)
 		end
 
 		def set_inputs(inputs)
@@ -122,7 +124,7 @@ module FlipFlop
 				print "invalid state, resetting"
 			end
 
-			if not (@preset.state or @clear.state)
+			if @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
@@ -173,13 +175,13 @@ module FlipFlop
 				return self.setFF()
 			elsif @clear.state == 0 and @preset.state == 1
 				return self.resetFF()
-			elsif not (@preset.state or @clear.state)
+			elsif @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
 			else
 				if @clk_old_value == 1 and @clk.state == 0
-					if @S.state and @R.state
+					if @S.state == 1 and @R.state == 1
 						@S.state = 0
 						@R.state = 1
 						print "invalid state, resetting"		

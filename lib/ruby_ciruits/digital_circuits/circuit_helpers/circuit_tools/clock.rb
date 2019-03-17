@@ -20,7 +20,7 @@ require_relative "../connectors/connector"
 
 class Clock
 	include Celluloid
-	attr_reader :state, :frequency, :time_period, :name
+	attr_reader :state, :frequency, :time_period, :name, :clock_connector
 
 	def initialize(inital_state=1, frequency=nil, time_period=nil, name=nil)
 		if not frequency.nil?

@@ -37,7 +37,7 @@ class Connector
 		# to store all the taps onto this connection
 		@enable = true
 
-		@connections = {"input" => [], output => []}
+		@connections = {"input" => [], "output" => []}
 		self.set_logic(state)
 		
 		@old_state = nil

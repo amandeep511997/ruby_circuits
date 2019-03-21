@@ -299,8 +299,8 @@ module LogicGates
 
 	def self.belongs?(element)
 		type = element.is_a?(AND) | element.is_a?(OR) | element.is_a?(NOT)
-		type = element.is_a?(NAND) | element.is_a?(NOR)
-		type = element.is_a?(XOR) | element.is_a?(XNOR)
+		type |= element.is_a?(NAND) | element.is_a?(NOR)
+		type |= element.is_a?(XOR) | element.is_a?(XNOR)
 		return type
 	end
 

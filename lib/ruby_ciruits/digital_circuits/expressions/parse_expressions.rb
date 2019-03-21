@@ -217,7 +217,6 @@ class ParseExpression
 				pos, equation_final = club_gates(equation_final, from, to)
 				unoptimized |= not_nil?(pos)
 			end
-			
 		end
 
 		if @no_error

@@ -35,17 +35,26 @@ class Clock
 
 		@name = name
 		@state = inital_state
+		@starting_state = inital_state
 
 		@clock_connector = Connector.new(inital_state)
 
+		@stopped = false
 		@started = false
+
+		@clock = nil
+		# we dont start it here
 	end
 
 	def start
 		if not @started
-			every @time_period do 
+			@started = true
+			@clock = every @time_period do 
 				toogle_state()
 			end	
+		elsif @stopped
+			@stopped = false
+			@clock.resume
 		end
 	end
 
@@ -66,19 +75,27 @@ class Clock
 	end
 
 	def stop
+		if not @stopped
+			@clock.pause
+			@stopped = true
+		end
+	end
+
+	def reset
+		self.stop
+		self.set_state(@starting_state)
+		# start by your own
+	end
+
+	def kill 
+		@clock.pause
 		self.terminate
 	end
 	
 private
 	
 	def toogle_state
-		if @state == 1
-			@state = 0
-			@clock_connector.state = @state	
-		else
-			@state = 1
-			@clock_connector.state = @state	
-		end
+		self.set_state(1 - @state)
 	end
 
 end

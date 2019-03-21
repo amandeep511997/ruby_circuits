@@ -220,16 +220,18 @@ module FlipFlop
 			@preset = Connector.new(1)
 			@clear = Connector.new(1)
 
-			self.set_inputs(j, k, enable, preset, clear)
-			self.set_outputs(a, b)
+			@J.tap(self,"input")
+			@K.tap(self, "input")
+			@enable.tap(self, "input")
+			@clk.tap(self, "input")
 
-			@J.tap("input")
-			@K.tap("input")
-			@enable.tap("input")
-			@clk.tap("input")
+			@A.tap(self, "output")
+			@B.tap(self, "output")
 
-			@A.tap("output")
-			@B.tap("output")
+			to_inputs = {"J" => j, "K" => k, "enable" => enable, "preset" => preset, "clear" => clear}
+			self.set_inputs(to_inputs)
+			to_outputs = {"A" => a, "B" => b}
+			self.set_outputs(to_outputs)
 		end
 
 		def set_inputs(inputs)
@@ -278,16 +280,16 @@ module FlipFlop
 				end 
 			end
 
-			if not(@preset.state or @clear.state)
+			if @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
 			end
 
-			@J.tap("input")
-			@K.tap("input")
-			@enable.tap("input")
-			@clk.tap("input")
+			@J.tap(self,"input")
+			@K.tap(self,"input")
+			@enable.tap(self, "input")
+			@clk.tap(self, "input")
 		end
 
 		def set_outputs(outputs)
@@ -307,8 +309,8 @@ module FlipFlop
 				end
 			end
 
-			@A.tap("output")
-			@B.tap("output")
+			@A.tap(self, "output")
+			@B.tap(self, "output")
 		end
 
 		def trigger
@@ -316,7 +318,7 @@ module FlipFlop
 				return self.setFF()
 			elsif @clear.state == 0 and @preset.state == 1
 				return self.resetFF()
-			elsif not(@clear.state or @preset.state)
+			elsif @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
@@ -365,8 +367,10 @@ module FlipFlop
 			@preset = Connector(1)
 			@clear = Connector(1)
 
-			self.set_inputs(d, enable, preset, clear)
-			self.set_outputs(a, b)
+			to_inputs = {"D" => d, "enable" => enable, "preset" => preset, "clear" => clear}
+			self.set_inputs(to_inputs)
+			to_outputs = {"A" => a, "B" => b}
+			self.set_outputs(to_outputs)
 		end
 
 		def set_inputs(inputs)
@@ -409,7 +413,7 @@ module FlipFlop
 				end 
 			end
 
-			if not(@preset.state or @clear.state)
+			if @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
@@ -451,7 +455,7 @@ module FlipFlop
 				return self.setFF()
 			elsif @clear.state == 0 and @preset.state == 1
 				return self.resetFF()
-			elsif not(@clear.state or @preset.state)
+			elsif @preset.state == 0 and @clear.state == 0
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"

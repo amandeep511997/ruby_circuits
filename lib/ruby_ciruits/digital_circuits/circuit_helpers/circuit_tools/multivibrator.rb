@@ -64,19 +64,18 @@ class Multivibrator
 				if @mode == 1
 					@multivibrator_connector.state = 1
 					@multivibrator_connector.trigger()
-					sleep @time_period
-					toogle_state()
+					every @time_period do
+						toogle_state()
+					end
 					@update = false
 				elsif @mode == 2
-					while @mode == 2 and @update == true
+					on_off_time = if @multivibrator_connector.state == 1 then on_time else off_time end
+					every on_off_time do
 						toogle_state()
-						if @multivibrator_connector.state == 1
-							sleep on_time
-						else
-							sleep off_time
-						end
+						on_off_time = if @multivibrator_connector.state == 1 then on_time else off_time end
 					end
 				else @mode == 3
+					
 					toogle_state()
 					@update = false
 				end
@@ -119,7 +118,7 @@ class Multivibrator
 private
 
 	def toogle_state
-		@multivibrator_connector = if @multivibrator_connector.state == 1 then 0 else 1 end
+		self.set_state(1 - @multivibrator_connector.state)
 		@multivibrator_connector.trigger()	
 	end
 end

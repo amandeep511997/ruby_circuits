@@ -16,8 +16,6 @@ require_relative "../connectors/connector"
 	to prevent overloading of the CPU
 =end
 
-# seperate clock stop and kill functions - TODO
-
 class Clock
 	include Celluloid
 	attr_reader :state, :frequency, :time_period, :name, :clock_connector

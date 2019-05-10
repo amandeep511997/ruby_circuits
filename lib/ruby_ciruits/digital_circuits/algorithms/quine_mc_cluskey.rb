@@ -78,17 +78,31 @@ private
 		# to 1 or don't care
 		sigma = Array.new(@number_of_variables + 1, Set.new)
 
+		# cubes is a list of all maarkers in the map.
 		cubes.each do |x|
-			sigma[bit_count(x)].add([i, 0])
+			sigma[bit_count(x)].add([x, 0])
 		end
 		
 		primes = Set.new
 
-		#while sigma.length > 0 
-		#	nsigma = []
-		#	redundant = Set.new
-		#
-		#end
+		while sigma
+			nsigma = Array.new
+			redundant = Set.new
+			
+			sig_index = 1
+			while sig_index < sigma.length
+				c1 = sigma[sig_index - 1]
+				c2 = sigma[sig_index]
+				
+				nc = Set.new
+				
+				c1.each do |a|
+					c2.each do |b|
+						m = 
+					end
+				end
+			end
+		end
 
 
 	end

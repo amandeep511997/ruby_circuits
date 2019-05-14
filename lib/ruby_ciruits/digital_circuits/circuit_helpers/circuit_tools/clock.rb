@@ -50,7 +50,7 @@ class Clock
 			@clock = every @time_period do 
 				toogle_state()
 			end	
-		elsif @stopped
+		elsif @stopped and not @clock.nil?
 			@stopped = false
 			@clock.resume
 		end
@@ -73,7 +73,7 @@ class Clock
 	end
 
 	def stop
-		if not @stopped
+		if not @stopped and not @clock.nil?
 			@clock.pause
 			@stopped = true
 		end

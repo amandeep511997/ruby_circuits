@@ -1,15 +1,24 @@
 require_relative "ruby_ciruits"
 
-g = LogicGates::AND.new(0, 1)
-g = LogicGates::AND.new(1, 1, 1, 1)
-print g.output()
-g.get_input_states()
 
-#Gates with connector
-c = Connector.new
-g = LogicGates::AND.new(1, 1)
-g.set_output(c)
-g1 = LogicGates::AND.new(c, 1)
-c.is_output?(g)
-c.is_output?(g1)
-print c.is_input?(g1)
+clock = Clock.new
+clock.start()
+
+puts("clock is set\n")
+
+o = Oscilloscope.new([clock.clock_connector, 'CLK'])
+o.set_scale(0.015)  # Set scale by trial and error.
+o.set_width(150)
+o.start()
+
+puts("oscilloscope is set\n")
+
+20.times do 
+	o.display()
+	sleep 1
+	puts clock.state
+end
+	
+# Kill the clock and the oscilloscope threads after use
+o.kill()
+clock.kill()

@@ -1,4 +1,4 @@
-require_relative "../utility/oscilloscope_symbols"
+require_relative "../utility/symbols"
 require 'celluloid'
 
 =begin

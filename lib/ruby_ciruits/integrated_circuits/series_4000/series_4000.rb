@@ -1,7 +1,7 @@
 require_relative '../design/structure'
 require_relative '../design/base_14pin'
 require_relative '../design/base_16pin'
-# require [connectors, gates, ic.base, combinational, sequential, and clock]
+# require [connectors, gates, ic.basgit e, combinational, sequential, and clock]
 # require [base14pin, base16pin]
 
 # This module contains all classes for 4000 series

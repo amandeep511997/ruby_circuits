@@ -71,62 +71,6 @@ module IC
 			raise "IC is not supported"
 		end
 	end
-
-	def truth_table(pin_config)
-		a = Hash.new
-		if self.is_a?(Base_14pin)
-			pin_signal = Array.new(14, 0)
-			pin_signal[13] = 1
-			
-			pin_signal.each_with_index do |signal, pin|
-				a[pin + 1] = signal
-			end
-		elsif self.is_a?(Base_16pin)
-			pin_signal = Array.new(16, 0)
-			pin_signal[13] = 1
-			pin_signal[15] = 1
-			
-			pin_signal.each_with_index do |signal, pin|
-				a[pin + 1] = signal
-			end
-		elsif self.is_a?(Base_5pin)
-			pin_signal = Array.new(5, 0)
-			pin_signal[4] = 1
-			
-			pin_signal.each_with_index do |signal, pin|
-				a[pin + 1] = signal
-			end
-		end
-
-		inp = pin_config['i']
-		out = pin_config['o']
-
-		print("   " + "INPUTS" + (" " * (5 * inp.length - 4)) + "|" + "OUTPUTS")
-        print("   " + "-" * (5 * inp.length + 2) + "|" + "-" * (5 * out.length))
-
-        inp.each do |el|
-        	if el.to_s.length == 1
-        		print("  " + el.to_s)
-        	elsif el.to_s.length == 2
-				print("  " + el.to_s)
-			end        		
-       	end 
-
-       	out.each do |el|
-       		if el.to_s.length == 1
-       			print("  " + el.to_s)
-        	elsif el.to_s.length == 2
-				print("  " + el.to_s)
-			end 	
-       	end
-
-       	def f(l)
-       		## to be done
-		end
-
-		f(inp)
-	end
-
 end
 
 # Pin class for defining particular pin of an IC

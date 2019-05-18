@@ -4,10 +4,10 @@ require_relative 'structure'
 module Base_14pin
 	include IC
 	
-	def set_properties
+	def self.set_properties
 		@total_pins = 14
 		@uses_pin_class = false
-		self.set_properties
+		IC.set_properties
 	end
 
 	def set_pin(pin_no, pin_value)

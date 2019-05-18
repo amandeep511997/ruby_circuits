@@ -2,7 +2,7 @@ require_relative "../utility/symbols"
 
 # this is a base module for all ICs
 module IC
-	def set_properties
+	def self.set_properties
 		@output_connector = Hash.new
 	end
 
@@ -30,7 +30,7 @@ module IC
 
 		args_hash.each_key do |pin|
 			if @uses_pin_class
-				@pins[pin] = set_pin_param(args_hash[pin])
+				@pins[pin].set_pin_param(args_hash[pin])
 			else
 				@pins[pin] = args_hash[pin]
 			end	
@@ -113,7 +113,11 @@ class Pin
 	def 
 
 	def to_s
-		return self.value.to_s
+		return @value.to_s
+	end
+
+	def to_logic
+		return Logic.new(@value)
 	end
 
 	# this method converts a list of logic gates to pin instances
@@ -133,3 +137,43 @@ class Pin
 end
 
 
+class Logic
+	def initialize(value=0)
+		if is_boolean?(value)
+			@value = if value.class == TrueClass then 1 else 0 end
+		else
+			@value = value
+		end
+	end
+
+	def +(right)
+		return Logic.new(LogicGates::OR.new(@value, right.value).output())
+	end
+
+	def |(right)
+		return Logic.new(LogicGates::OR.new(@value, right.value).output())
+	end
+
+	def ^(right)
+		return Logic.new(LogicGates::XOR.new(@value, right.value).output())
+	end
+
+	def *(right)
+		return Logic.new(LogicGates::AND.new(@value, right.value).output())
+	end
+
+	def &(right)
+		return Logic.new(LogicGates::AND.new(@value, right.value).output())
+	end
+
+	def ~(right)
+		return Logic.new(LogicGates::NOT.new(@value).output())
+	end
+
+private 
+
+	def is_boolean?(x)
+		return [TrueClass, FalseClass].include?(x.class)
+	end
+
+end

@@ -24,7 +24,7 @@ require 'celluloid'
 =end
 
 class Oscilloscope
-	include Celluloid
+	include Cel luloid
 
 	attr_reader :max_inp, :width, :inputs, :scale
 

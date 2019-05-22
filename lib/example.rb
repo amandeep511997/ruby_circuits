@@ -10,6 +10,7 @@ o = Oscilloscope.new([clock.clock_connector, 'CLK'])
 o.set_scale(0.015)  # Set scale by trial and error.
 o.set_width(150)
 o.start()
+#o.unhold()
 
 puts("oscilloscope is set\n")
 

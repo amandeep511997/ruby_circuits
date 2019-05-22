@@ -282,8 +282,8 @@ module LogicGates
 					else
 						value = value ^ inp
 					end
+					value = 1 - value
 				end
-				value = 1 - value
 				self.update_result(value)
 				if @output_type == 1
 					@output_connector.trigger()

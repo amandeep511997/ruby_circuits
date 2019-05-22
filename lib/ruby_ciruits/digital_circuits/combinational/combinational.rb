@@ -664,7 +664,7 @@ module Combinational
 		end
 
 		def set_output(index, value)
-			if not is_a?(Connector)
+			if not value.is_a?(Connector)
 				raise "expecting a connector class object"
 			end
 			value.tap(self, "output")
@@ -677,7 +677,7 @@ module Combinational
 			@result = value
 			@output_type.each_with_index do |out, idx|
 				if out == 1
-					output_connector[idx].state = value[idx]
+					@output_connector[idx].state = value[idx]
 				end
 			end
 		end

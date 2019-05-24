@@ -36,7 +36,7 @@ def create_list(expr)
             sublist << str
             list3.concat(sublist)
         else
-            list3 << [str]
+            list3.concat([str])
         end
     end
 

@@ -280,7 +280,7 @@ module FlipFlop
 				end 
 			end
 
-			if @preset.state == 0 and @clear.state == 0
+			if not (@preset.state == 1 or @clear.state == 1)
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
@@ -318,7 +318,7 @@ module FlipFlop
 				return self.setFF()
 			elsif @clear.state == 0 and @preset.state == 1
 				return self.resetFF()
-			elsif @preset.state == 0 and @clear.state == 0
+			elsif not (@preset.state == 1 or @clear.state == 1)
 				@preset.state = 1
 				@clear.state = 1
 				print "invalid state, resetting"
@@ -327,9 +327,9 @@ module FlipFlop
 					if @enable.state == 1
 						if @J.state == 1 and @K.state == 1
 							@A.state = if @A.state == 1 then 0 else 1 end
-						elsif @J.state == 1 and @K.state == 1
+						elsif not @J.state == 1 and @K.state == 1
 							@A.state = 0
-						elsif @J.state == 1 and @K.state == 1
+						elsif @J.state == 1 and not @K.state == 1
 							@A.state = 1
 						end	
 					end
@@ -364,8 +364,8 @@ module FlipFlop
 			@and_gate = LogicGates::AND.new(@D, @enable)
 			@not_gate = LogicGates::NOT.new(@A)
 
-			@preset = Connector(1)
-			@clear = Connector(1)
+			@preset = Connector.new(1)
+			@clear = Connector.new(1)
 
 			to_inputs = {"D" => d, "enable" => enable, "preset" => preset, "clear" => clear}
 			self.set_inputs(to_inputs)

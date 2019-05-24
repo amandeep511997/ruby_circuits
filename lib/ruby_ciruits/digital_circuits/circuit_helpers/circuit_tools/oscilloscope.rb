@@ -24,14 +24,13 @@ require 'celluloid'
 =end
 
 class Oscilloscope
-	include Cel luloid
+	include Celluloid
 
 	attr_reader :max_inp, :width, :inputs, :scale
 
 	def initialize(*inputs)
 		@max_inp = 15
 		@width = 150
-		@width_itr = 0
 
 		@inputs = Array.new
 		@len_inputs = 0
@@ -59,7 +58,7 @@ class Oscilloscope
 		if not @started
 			@started = true
 
-			@oscilloscope = every 0.1 do 
+			@oscilloscope = every 0.2 do 
 				@width.times do |i|
 					sleep @scale
 					sampler(i)
@@ -85,14 +84,13 @@ class Oscilloscope
 	def unhold
 		if not @oscilloscope.nil?
 			clear(true)
-			@width_itr = 0
-			@oscilloscope.pause
+			@oscilloscope.resume
 		end
 	end
 
 	def hold
 		if not @oscilloscope.nil?
-			@oscilloscope.resume
+			@oscilloscope.pause
 		end
 	end
 
@@ -100,6 +98,7 @@ class Oscilloscope
 		@max_inp.times do 
 			@logic_array << Array.new(@width, 0)
 		end
+
 	end
 
 	def set_width(w=150)
@@ -251,6 +250,10 @@ private
 	end
 
 	def clear(keep_inputs=false)
+		if not @oscilloscope.nil?
+			#@oscilloscope.pause
+		end
+
 		print("\x1b[0m")
 
 		self._clear_LA()

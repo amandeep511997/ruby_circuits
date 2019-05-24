@@ -16,6 +16,7 @@ puts("oscilloscope is set\n")
 
 20.times do 
 	o.display()
+	o.unhold()
 	sleep 1
 	puts clock.state
 end

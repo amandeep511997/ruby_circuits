@@ -25,7 +25,7 @@ module RegisterBase
 	def update_connections(inputs)
 		inputs.each do |inp|
 			if inp.is_a?(Connector)
-				inp.tap("input")
+				inp.tap(self, "input")
 			end
 		end
 	end
@@ -47,7 +47,7 @@ module RegisterBase
 		end
 
 		if value.is_a?(Connector)
-			value.tap("input")
+			value.tap(self, "input")
 		end
 	end
 
@@ -76,7 +76,7 @@ module RegisterBase
 
 	def update_result(value) 
 		@result = value
-		@output_type.each_with_index do |out, idx|
+		@output_type.each do |idx, out|
 			if out == 1
 				@output_connector[idx].state = @result[idx]
 				@output_connector[idx].trigger()
@@ -90,7 +90,7 @@ module RegisterBase
 		end
 		@output_type[index] = 1
 		@output_connector[index] = value
-		value.tap("output")
+		value.tap(self, "output")
 		self.update_result(@result)
 	end
 
@@ -111,17 +111,17 @@ module Register
 		def trigger
 			out = []
 			4.times do |i|
-				d_flip_flop = FlipFlop::D.new(@inputs[i], Connector.new(1), @clock.A, @clear)
+				d_flip_flop = FlipFlop::D.new(@inputs[i], Connector.new(1), @clock.clock_connector, @clear)
 
 				while true
-					if @clock.A.state == 1
+					if @clock.clock_connector.state == 1
 						d_flip_flop.trigger()
 						break
 					end
 				end
 
 				while true
-					if @clock.A.state == 0
+					if @clock.clock_connector.state == 0
 						d_flip_flop.trigger()
 						break
 					end
@@ -144,7 +144,7 @@ module Register
 		def trigger
 			last_bit = @inputs[0]
 			@inputs.each_with_index do |inp, idx|
-				d_flip_flop = FlipFlop::D.new(inp, Connector.new(1), @clock.A, @clear)
+				d_flip_flop = FlipFlop::D.new(inp, Connector.new(1), @clock.clock_connector, @clear)
 
 				if @circular == 1 and idx == 0
 					@inputs[idx] = @inputs[@inputs.length - 1]
@@ -153,14 +153,14 @@ module Register
 				end
 
 				while true
-					if @clock.A.state == 1
+					if @clock.clock_connector.state == 1
 						d_flip_flop.trigger()
 						break
 					end
 				end
 
 				while true
-					if @clock.A.state == 0
+					if @clock.clock_connector.state == 0
 						d_flip_flop.trigger()
 						break
 					end

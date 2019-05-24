@@ -14,9 +14,11 @@ module CounterBase
 		@bits = bits
 		@out = []
 		@out_inverse = []
-		@bits.times do 
-			@out << Connector.new(data)
-			@out_inverse << Connector.new(LogicGates::NOT.new(data).output())
+		if not data.nil?
+			@bits.times do 
+				@out << Connector.new(data)
+				@out_inverse << Connector.new(LogicGates::NOT.new(data).output())
+			end
 		end
 
 		@out_old = @out
@@ -58,7 +60,7 @@ module CounterBase
 		while true
 			if @clk.state == 0
 				#Falling edge will triger the FF
-				if @ripple_type
+				if @ripple_type == true
 					@ff[ffnumber].trigger()
 				else
 					@bits.times do |idx|
@@ -98,7 +100,7 @@ module CounterBase
 		inset = @clear.state
 
 		if @bits_fixed
-			self.set_properties(@clk, 1, @preset, @clear)
+			initialize(@clk, 1, @preset, @clear)
 		else
 			self.set_properties(@bits, @clk, 1, @preset, @clear)
 		end
@@ -113,7 +115,7 @@ module CounterBase
 		reset = @preset.state
 
 		if @bits_fixed
-			self.set_properties(@clk, 0, @preset, @clear)
+			initialize(@clk, 0, @preset, @clear)
 		else
 			self.set_properties(@bits, @clk, 0, @preset, @clear)
 		end
@@ -145,6 +147,7 @@ end
 
 module Counter
 	class Binary
+		attr_reader :out
 		include CounterBase
 
 		def initialize(bits, clk, data=0, preset=Connector.new(1), clear=Connector.new(1))
@@ -162,6 +165,7 @@ module Counter
 	end	
 
 	class NBitRipple
+		attr_reader :out
 		include CounterBase
 
 		def initialize(bits, clock_connector, data=0, preset=Connector.new(1), clear=Connector.new(1))
@@ -176,9 +180,10 @@ module Counter
 	end
 
 	class NBitDown
+		attr_reader :out
 		include CounterBase
 
-		def initialize(bits, clock_connector, data, preset, clear)
+		def initialize(bits, clock_connector, data=0, preset=Connector.new(1), clear=Connector.new(1))
 			self.set_properties(bits, clock_connector, data, preset, clear)
 
 			@ff[@bits - 1] = FlipFlop::T.new(@t, @enable, @clk, @preset, @clear, @out[@bits - 1], @out_inverse[@bits - 1])
@@ -191,6 +196,7 @@ module Counter
 
 	# 4 bit decade counter
 	class Decade
+		attr_reader :out
 		include CounterBase
 
 		def initialize(clock_connector, data=0, preset=Connector.new(1), clear=Connector.new(1))
@@ -214,6 +220,7 @@ module Counter
 
 	# 4 bit octal counter
 	class Octal
+		attr_reader :out
 		include CounterBase
 		def initialize(clock_connector, data=0, preset=Connector.new(1), clear=Connector.new(1))
 			self.set_properties(4, clock_connector, data, preset, clear)
@@ -236,6 +243,7 @@ module Counter
 
 	# n bit ring counter
 	class Ring
+		attr_reader :out
 		include CounterBase
 
 		def initialize(bits, clock_connector, preset=Connector.new(1), clear=Connector.new(1))
@@ -244,7 +252,7 @@ module Counter
 			counter_bits = Array.new(bits, 0)
 			counter_bits[0] = 1
 			
-			@shift_register = Register::Shift.new(counter_bits, clock_connector, circular=1)
+			@shift_register = Register::Shift.new(counter_bits, clock_connector, clear, 1)
 			@out = []
 		end
 
@@ -268,6 +276,7 @@ module Counter
 
 	# n bit johnson counter
 	class Johnson
+		attr_reader :out
 		include CounterBase
 
 		def initialize(bits, clock_connector, preset=Connector.new(1), clear=Connector.new(1))
@@ -276,7 +285,7 @@ module Counter
 			counter_bits = Array.new(bits, 0)
 			counter_bits[0] = 1
 
-			@shift_register = Register::Shift.new(counter_bits, clock_connector, circular=1)
+			@shift_register = Register::Shift.new(counter_bits, clock_connector, clear, circular=1)
 			@out = []
 			@tail = 1
 		end
